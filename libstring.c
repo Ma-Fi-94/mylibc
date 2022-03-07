@@ -68,42 +68,36 @@ int strncmp(const char* s, const char *t, size_t n) {
     return *s - *t;
 }
 
+
+// Return ptr to first c in s, or NULL if not present
+char *strchr(const char *s, int c) {
+    while(*s != c && *s++) {;}
+    return (*s ? s : NULL);
+}
+
+
+// Return ptr to last c in s, or NULL if not present
+char *strrchr(const char *s, int c) {
+    char *r = NULL;
+    while(*s) {
+        if (*s == c) {r = s;}
+        s++;
+    }
+    return r;
+}
+
+
 // Some testing
 int main() {
-    char str1[] = "This is ";
-    char str2[] = "a test.";
-    char str3[80];
-    strcpy(str3, str1);
-    strcat(str3, str2);
-    printf("%s\n", str3);
+    char str1[] = "This is a test";
+    printf("%li\n", strchr(str1, 'a') - str1);
+    printf("%li\n", strchr(str1, 'i') - str1);
+    printf("%p\n", strchr(str1, 'z'));
 
-    strcpy (str3, "This");
-    strncat (str3, " is a super long string but we will only copy a few chars of it.", 3);
-    printf("%s\n", str3);
+    printf("%li\n", strrchr(str1, 'a') - str1);
+    printf("%li\n", strrchr(str1, 'i') - str1);
+    printf("%p\n", strrchr(str1, 'z'));
 
-
-   char s1[] = "abcd", s2[] = "abCd", s3[] = "abc";
-   int result;
-
-   // comparing strings str1 and str2
-   result = strcmp(s1, s1);
-   printf("strcmp(str1, str1) = %d\n", result);
-
-   result = strcmp(s1, s2);
-   printf("strcmp(str1, str2) = %d\n", result);
-
-   // comparing strings str1 and str3
-   result = strcmp(s1, s3);
-   printf("strcmp(str1, str3) = %d\n", result);
-
-   result = strncmp(s1, s2, 1);
-   printf("strncmp(str1, str2, 1) = %d\n", result);
-
-   result = strncmp(s1, s2, 2);
-   printf("strncmp(str1, str2, 2) = %d\n", result);
-
-   result = strncmp(s1, s2, 3);
-   printf("strncmp(str1, str1, 3) = %d\n", result);
 
     return 0;
 
