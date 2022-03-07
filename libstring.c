@@ -79,9 +79,8 @@ char *strchr(const char *s, int c) {
 // Return ptr to last c in s, or NULL if not present
 char *strrchr(const char *s, int c) {
     char *r = NULL;
-    while(*s) {
+    for (; *s; s++) {
         if (*s == c) {r = s;}
-        s++;
     }
     return r;
 }
