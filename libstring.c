@@ -124,8 +124,30 @@ char *strpbrk(const char *s, const char *c) {
 }
 
 
-// TODO Return pointer to first occurence of t in s
-// char *strstr(const char *s, const char *t)
+// Return pointer to first occurence of t in s, NULL if none.
+char *strstr(const char *s, const char *t) {
+    char *t_start = t;
+    char *ret = NULL;
+
+    // Iterate through s
+    for (; *s; s++) {
+        // When found the first char of t in s:
+        if (*s == *t) {
+            ret = s;
+            // Traverse t and compare with substring of s
+            for (int i = 1; t[i]; i++) {
+                // mismatch: reset pointer t, continue iterating through s
+                if (s[i] != t[i]) {
+                    ret = NULL;
+                    t = t_start;
+                    break;
+                }
+            }
+            if (ret) {return ret;}
+        }
+    }
+    return NULL;
+}
 
 
 // Return pointer to string describing error number n
@@ -191,22 +213,14 @@ void *memset(void* s, char c, size_t n) {
 
 // Some testing
 int main() {
-    char str1[] = "123456789";
-    char str2[] = "1239";
-    printf("%i\n", (int) strcmp(str1, str1));
-    printf("%i\n", (int) strcmp(str1, str2));
-    printf("%i\n", (int) strcmp(str2, str1));
-    printf("%i\n", (int) memcmp((void*) str1, (void*) str1, 1));
-    printf("%i\n", (int) memcmp((void*) str1, (void*) str2, 10));
-    printf("%i\n", (int) memcmp((void*) str2, (void*) str1, 10));
-    printf("%i\n", (int) memcmp((void*) str2, (void*) str1, 1));
 
-
-   char str[] = "http://www.tutorialspoint.com";
-   int ch = '.';
-   char *ret;
-   ret = memchr((void*) str, (void*) ch, 15);
-   printf("String from first |%c| on is |%s|\n", ch, ret);
+   char str[] = "abcdefghhij";
+   char find[] = "xyz";
+   char find2[] = "bcd";
+   printf("%p %p\n", str, strstr(str, find));
+   printf("%p %p\n", str, strstr(str, find2));
+   printf("\t -> %s\n", strstr(str, find2));
+ 
 
 
 
