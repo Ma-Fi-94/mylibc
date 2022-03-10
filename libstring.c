@@ -128,8 +128,11 @@ char *strpbrk(const char *s, const char *c) {
 // char *strstr(const char *s, const char *t)
 
 
-// TODO Return pointer to string describing error number n
-// char *strerror(int n) {}
+// Return pointer to string describing error number n
+char *strerror(int n) {
+    char r[] = "Read the manual.";
+    return r;
+}
 
 
 // TODO Tokenise string s with all chars from c as delimiters
@@ -161,21 +164,50 @@ void *memmove(void *s, const void *t, size_t n) {
     return s;
 }
 
-// TODO
-// int memcmp(cs,ct,n)
-// void *memchr(cs,c,n)
-// void *memset(s,c,n)
+
+// Same as strcmp, but with void ptrs
+int memcmp(const void *s, const void *t, size_t n) {
+    char *u = (char*) s;
+    char *v = (char*) t;
+    for (; n && *u == *v; n--, u++, v++) {;}
+    return *u - *v;
+}
+
+
+// Same as strchr but with void ptrs
+void *memchr(const void *s, int c, size_t n) {
+    char *t = (char*) s;       
+    for (; n && (*t != c); n--, t++) {;}
+    return (*t == c ? (void*) t : NULL);
+}
+
+
+// Set first n elements of s to c, return s
+void *memset(void* s, char c, size_t n) {
+    char* t = (char*) s;
+    while (n--) {*t++ = c;}
+    return s;
+}
 
 // Some testing
 int main() {
-    char str1[] = "abcxxxxxxxxx";
-    char str2[] = "123456789abcdef";
-    printf("%i\n", (int) strspn(str1, str2));
+    char str1[] = "123456789";
+    char str2[] = "1239";
+    printf("%i\n", (int) strcmp(str1, str1));
+    printf("%i\n", (int) strcmp(str1, str2));
+    printf("%i\n", (int) strcmp(str2, str1));
+    printf("%i\n", (int) memcmp((void*) str1, (void*) str1, 1));
+    printf("%i\n", (int) memcmp((void*) str1, (void*) str2, 10));
+    printf("%i\n", (int) memcmp((void*) str2, (void*) str1, 10));
+    printf("%i\n", (int) memcmp((void*) str2, (void*) str1, 1));
 
-    char str3[] = "ghijkl1234";
-    char str4[] = "123456789abcdef";
-    printf("%i\n", (int) strcspn(str3, str4));
-    printf("%c\n", *strpbrk(str3, str4));
+
+   char str[] = "http://www.tutorialspoint.com";
+   int ch = '.';
+   char *ret;
+   ret = memchr((void*) str, (void*) ch, 15);
+   printf("String from first |%c| on is |%s|\n", ch, ret);
+
 
 
     return 0;
