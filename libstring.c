@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 // Copy s to d; return d.
 char *strcpy(char *d, const char *s) {
@@ -152,13 +153,45 @@ char *strstr(const char *s, const char *t) {
 
 // Return pointer to string describing error number n
 char *strerror(int n) {
-    char r[] = "Read the manual.";
+    char r[] = "Read the manual.\n";
     return r;
 }
 
 
-// TODO Tokenise string s with all chars from c as delimiters
-// char *strtok(char *s, const char* c)
+// Tokenise string s with all chars from d as delimiters
+// based on https://github.com/wuzhouhui/c_standard_lib/blob/master/STRING/STRTOK.C
+char *strtok(char *s, char *d) {
+    // Static ptr to retain state between calls
+	static char *ssave = "";
+    // Limits of the current token
+	char *tbegin, *tend;
+
+    // If we have an argument s, we start a new search
+    // Else we continue where we stopped in the last call
+	tbegin = s ? s : ssave;
+
+    // If there are still some tokens at the beginning, we skip them
+	tbegin += strspn(tbegin, d);
+
+    // Reached the end, return NULL
+	if (*tbegin == '\0') {
+		ssave = "";
+		return NULL;
+	}
+
+    // Current token ends where we meet the first delimiter
+	tend = tbegin + strcspn(tbegin, d);
+
+    // If we indeed found a delimiter,
+    // we overwrite it with \0, so that we may return
+	if (*tend != '\0')
+		*tend++ = '\0';
+
+    // Save state for next call, and return
+	ssave = tend;
+	return tbegin;
+}
+
 
 
 // Copy n symbols from t to s, return s
@@ -213,15 +246,19 @@ void *memset(void* s, char c, size_t n) {
 
 // Some testing
 int main() {
-
-   char str[] = "abcdefghhij";
-   char find[] = "xyz";
-   char find2[] = "bcd";
-   printf("%p %p\n", str, strstr(str, find));
-   printf("%p %p\n", str, strstr(str, find2));
-   printf("\t -> %s\n", strstr(str, find2));
+    char str[] = "Geeks-for-Geeks";
  
-
+    // Returns first token
+    char* token = strtok(str, "-");
+ 
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (token != NULL) {
+        printf("%s\n", token);
+        token = strtok(NULL, "-");
+    }
+ 
+    return 0;
 
 
     return 0;
